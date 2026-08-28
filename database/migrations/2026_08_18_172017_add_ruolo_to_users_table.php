@@ -1,0 +1,31 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->enum('ruolo', ['admin', 'operatore', 'paziente'])->default('paziente')->after('email');
+            $table->foreignId('operatore_id')->nullable()->after('ruolo')->constrained('operatori')->nullOnDelete();
+            $table->unsignedBigInteger('filemaker_persona_id')->nullable()->after('operatore_id')->index();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign(['operatore_id']);
+            $table->dropColumn(['ruolo', 'operatore_id', 'filemaker_persona_id']);
+        });
+    }
+};

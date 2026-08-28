@@ -1,0 +1,43 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+@import 'datatables.net-bs5/css/dataTables.bootstrap5.css';
+
+.bg-brand {
+    background-color: #0f5c52 !important;
+}
+
+.btn-brand {
+    background-color: #0f5c52;
+    border-color: #0f5c52;
+}
+
+.btn-brand:hover,
+.btn-brand:focus,
+.btn-brand:active {
+    background-color: #0c4a42;
+    border-color: #0c4a42;
+    color: #fff;
+}
+
+/* La regola equivalente di Bootstrap (.offcanvas.show) non vince sempre la cascata
+   in questa pipeline di build; forziamo esplicitamente lo stato aperto su mobile. */
+#sidebar.show {
+    transform: none !important;
+    visibility: visible !important;
+}
+
+/* Sidebar sempre visibile da tablet in su; sotto resta un offcanvas a scomparsa. */
+@media (min-width: 768px) {
+    #sidebar {
+        position: static !important;
+        transform: none !important;
+        visibility: visible !important;
+        display: flex !important;
+        width: 240px;
+        height: auto !important;
+    }
+
+    #sidebar .offcanvas-header {
+        display: none !important;
+    }
+}
