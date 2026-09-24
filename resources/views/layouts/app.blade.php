@@ -41,6 +41,7 @@
                 if ($utenteCorrente->isAdmin()) {
                     $vociMenu[] = ['route' => 'modelli-messaggio.index', 'label' => 'Modelli messaggio', 'icon' => 'bi-chat-left-text', 'active' => request()->routeIs('modelli-messaggio.*')];
                     $vociMenu[] = ['route' => 'messaggi.index', 'label' => 'Messaggi', 'icon' => 'bi-envelope', 'active' => request()->routeIs('messaggi.*')];
+                    $vociMenu[] = ['route' => 'whatsapp-inbox.index', 'label' => 'Casella WhatsApp', 'icon' => 'bi-chat-dots', 'active' => request()->routeIs('whatsapp-inbox.*')];
                     $vociMenu[] = ['route' => 'log-whatsapp.index', 'label' => 'Log WhatsApp', 'icon' => 'bi-whatsapp', 'active' => request()->routeIs('log-whatsapp.*')];
                     $vociMenu[] = ['route' => 'automazioni.index', 'label' => 'Automazioni', 'icon' => 'bi-lightning-charge', 'active' => request()->routeIs('automazioni.*')];
                     $vociMenu[] = ['route' => 'utenti.index', 'label' => 'Utenti', 'icon' => 'bi-people', 'active' => request()->routeIs('utenti.*')];

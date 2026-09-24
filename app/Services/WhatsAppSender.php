@@ -79,6 +79,58 @@ class WhatsAppSender
         return false;
     }
 
+    /**
+     * Invia un messaggio di testo libero a un numero, senza passare da un
+     * Messaggio/modello — usato per rispondere dalla casella WhatsApp.
+     * Funziona solo entro le 24h dall'ultimo messaggio ricevuto dal cliente.
+     *
+     * @return array{successo: bool, errore: ?string, wamid: ?string}
+     */
+    public function inviaTestoLibero(string $numeroGrezzo, string $testo): array
+    {
+        $impostazioni = Impostazione::corrente();
+
+        if (! $impostazioni->whatsapp_token || ! $impostazioni->whatsapp_phone_number_id) {
+            return ['successo' => false, 'errore' => 'Credenziali WhatsApp non configurate.', 'wamid' => null];
+        }
+
+        $numero = $this->normalizzaNumero($numeroGrezzo);
+
+        if (! $numero) {
+            return ['successo' => false, 'errore' => 'Numero non valido.', 'wamid' => null];
+        }
+
+        $corpoRichiesta = [
+            'messaging_product' => 'whatsapp',
+            'to' => $numero,
+            'type' => 'text',
+            'text' => ['body' => $testo],
+        ];
+
+        $endpoint = 'https://graph.facebook.com/' . self::VERSIONE_API . "/{$impostazioni->whatsapp_phone_number_id}/messages";
+
+        $risposta = Http::withToken($impostazioni->whatsapp_token)->post($endpoint, $corpoRichiesta);
+
+        LogWhatsapp::create([
+            'messaggio_id' => null,
+            'endpoint' => $endpoint,
+            'richiesta' => $corpoRichiesta,
+            'risposta_status' => $risposta->status(),
+            'risposta' => $risposta->json(),
+            'esito' => $risposta->successful() ? 'successo' : 'fallito',
+        ]);
+
+        if ($risposta->successful()) {
+            return ['successo' => true, 'errore' => null, 'wamid' => $risposta->json('messages.0.id')];
+        }
+
+        return [
+            'successo' => false,
+            'errore' => $risposta->json('error.message') ?? 'Errore sconosciuto restituito dal servizio WhatsApp.',
+            'wamid' => null,
+        ];
+    }
+
     private function corpoTemplate(Messaggio $messaggio, string $numero): array
     {
         $components = $messaggio->whatsapp_formato_parametri === 'nominale'

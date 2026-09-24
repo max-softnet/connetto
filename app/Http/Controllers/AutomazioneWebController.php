@@ -73,11 +73,18 @@ class AutomazioneWebController extends Controller
 
     public function esegui(EsecutoreAutomazioni $esecutore)
     {
-        $risultati = $esecutore->esegui();
+        $risultati = $esecutore->esegui(origine: 'manuale');
 
         if (empty($risultati)) {
             return redirect()->route('automazioni.index')->with('successo', 'Nessuna automazione attiva da eseguire.');
         }
+
+        return redirect()->route('automazioni.index')->with('risultatiEsecuzione', $risultati);
+    }
+
+    public function eseguiForzata(Automazione $automazione, EsecutoreAutomazioni $esecutore)
+    {
+        $risultati = $esecutore->esegui(origine: 'manuale', forza: true, soloAutomazioneId: $automazione->id);
 
         return redirect()->route('automazioni.index')->with('risultatiEsecuzione', $risultati);
     }

@@ -16,7 +16,7 @@ class EseguiAutomazioni extends Command
      */
     public function handle(EsecutoreAutomazioni $esecutore)
     {
-        $risultati = $esecutore->esegui();
+        $risultati = $esecutore->esegui(origine: 'automatica');
 
         if (empty($risultati)) {
             $this->info('Nessuna automazione attiva.');

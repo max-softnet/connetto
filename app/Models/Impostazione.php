@@ -11,6 +11,7 @@ class Impostazione extends Model
     protected $fillable = [
         'whatsapp_token',
         'whatsapp_phone_number_id',
+        'whatsapp_webhook_verify_token',
     ];
 
     protected $casts = [

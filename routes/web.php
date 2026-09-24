@@ -3,13 +3,19 @@
 use App\Http\Controllers\AutomazioneWebController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CalendarioWebController;
+use App\Http\Controllers\ConversazioneWhatsappWebController;
 use App\Http\Controllers\HomeWebController;
 use App\Http\Controllers\ImpostazioniWebController;
+use App\Http\Controllers\LogAutomazioneWebController;
 use App\Http\Controllers\LogWhatsappWebController;
 use App\Http\Controllers\MessaggioWebController;
 use App\Http\Controllers\ModelloMessaggioWebController;
 use App\Http\Controllers\UtenteWebController;
+use App\Http\Controllers\WebhookWhatsappController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/webhook/whatsapp', [WebhookWhatsappController::class, 'verifica']);
+Route::post('/webhook/whatsapp', [WebhookWhatsappController::class, 'ricevi']);
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'mostraLogin'])->name('login');
@@ -51,5 +57,12 @@ Route::middleware('auth')->group(function () {
             ->parameters(['automazioni' => 'automazione']);
 
         Route::post('/automazioni/esegui', [AutomazioneWebController::class, 'esegui'])->name('automazioni.esegui');
+        Route::post('/automazioni/{automazione}/esegui-forzata', [AutomazioneWebController::class, 'eseguiForzata'])->name('automazioni.esegui-forzata');
+
+        Route::get('/log-automazioni', [LogAutomazioneWebController::class, 'index'])->name('log-automazioni.index');
+
+        Route::get('/whatsapp-inbox', [ConversazioneWhatsappWebController::class, 'index'])->name('whatsapp-inbox.index');
+        Route::get('/whatsapp-inbox/{conversazione}', [ConversazioneWhatsappWebController::class, 'mostra'])->name('whatsapp-inbox.mostra');
+        Route::post('/whatsapp-inbox/{conversazione}/rispondi', [ConversazioneWhatsappWebController::class, 'rispondi'])->name('whatsapp-inbox.rispondi');
     });
 });

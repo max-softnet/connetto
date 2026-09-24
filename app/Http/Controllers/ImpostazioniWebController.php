@@ -19,6 +19,7 @@ class ImpostazioniWebController extends Controller
         $data = $request->validate([
             'whatsapp_phone_number_id' => ['nullable', 'string', 'max:255'],
             'whatsapp_token' => ['nullable', 'string'],
+            'whatsapp_webhook_verify_token' => ['nullable', 'string', 'max:255'],
         ]);
 
         $impostazioni = Impostazione::corrente();

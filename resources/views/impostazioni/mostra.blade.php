@@ -50,8 +50,49 @@
                     <div class="form-text">Per uso continuativo serve un token permanente da un System User (non quello temporaneo di 24h di prova).</div>
                 </div>
 
+                <hr class="my-4">
+
+                <h2 class="h6">Webhook (messaggi in arrivo)</h2>
+                <p class="text-muted small">
+                    Da inserire in Meta for Developers → WhatsApp → Configurazione → Webhook.
+                </p>
+
+                <div class="mb-3">
+                    <label class="form-label">URL di callback</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ url('/webhook/whatsapp') }}" readonly>
+                    </div>
+                    <div class="form-text">
+                        Deve essere un indirizzo raggiungibile da internet (HTTPS) — in locale serve un tunnel come ngrok.
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="whatsapp_webhook_verify_token" class="form-label">Verifica token</label>
+                    <div class="input-group">
+                        <input
+                            type="text"
+                            name="whatsapp_webhook_verify_token"
+                            id="whatsapp_webhook_verify_token"
+                            class="form-control"
+                            value="{{ old('whatsapp_webhook_verify_token', $impostazioni->whatsapp_webhook_verify_token) }}"
+                        >
+                        <button type="button" class="btn btn-outline-secondary" onclick="generaTokenWebhook()">Genera</button>
+                    </div>
+                    <div class="form-text">Deve essere identico qui e nel campo "Verifica il token" su Meta.</div>
+                </div>
+
                 <button type="submit" class="btn btn-primary">Salva</button>
             </form>
         </div>
     </div>
+
+    <script>
+        function generaTokenWebhook() {
+            const array = new Uint8Array(24);
+            crypto.getRandomValues(array);
+            const token = Array.from(array, (b) => b.toString(16).padStart(2, '0')).join('');
+            document.getElementById('whatsapp_webhook_verify_token').value = token;
+        }
+    </script>
 @endsection
