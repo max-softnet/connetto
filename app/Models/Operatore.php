@@ -11,6 +11,11 @@ class Operatore extends Model
     protected $fillable = [
         'nome',
         'colore',
+        'abilitato_automazioni',
+    ];
+
+    protected $casts = [
+        'abilitato_automazioni' => 'boolean',
     ];
 
     public function appuntamenti()

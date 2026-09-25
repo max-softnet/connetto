@@ -59,6 +59,19 @@
             </select>
         </div>
 
+        <div class="mb-3">
+            <label for="operatore" class="form-label">Operatore <span class="text-muted small">(opzionale)</span></label>
+            <select name="operatore" id="operatore" class="form-select">
+                <option value="">— Tutti gli operatori —</option>
+                @foreach ($operatori as $operatore)
+                    <option value="{{ $operatore->nome }}" {{ old('operatore', $automazione->operatore) === $operatore->nome ? 'selected' : '' }}>
+                        {{ $operatore->nome }}
+                    </option>
+                @endforeach
+            </select>
+            <div class="form-text">Limita l'automazione agli appuntamenti di un singolo operatore, oppure lasciala su "Tutti" per applicarla a tutti.</div>
+        </div>
+
         <div class="form-check mb-4">
             <input
                 type="checkbox"

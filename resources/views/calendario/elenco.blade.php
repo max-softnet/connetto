@@ -73,10 +73,19 @@
                                     </span>
                                 </td>
                                 @if (auth()->user()->isAdmin())
-                                    <td>
+                                    <td class="d-flex gap-2">
                                         <a href="{{ route('messaggi.crea', $appuntamento) }}" class="btn btn-sm btn-outline-primary">
                                             Invia messaggio
                                         </a>
+                                        <form
+                                            action="{{ route('appuntamenti.destroy', $appuntamento) }}"
+                                            method="POST"
+                                            onsubmit="return confirm('Eliminare definitivamente questo appuntamento? L\'operazione non è reversibile e cancellerà anche i messaggi collegati.');"
+                                        >
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">Elimina</button>
+                                        </form>
                                     </td>
                                 @endif
                             </tr>

@@ -44,6 +44,7 @@
                     $vociMenu[] = ['route' => 'whatsapp-inbox.index', 'label' => 'Casella WhatsApp', 'icon' => 'bi-chat-dots', 'active' => request()->routeIs('whatsapp-inbox.*')];
                     $vociMenu[] = ['route' => 'log-whatsapp.index', 'label' => 'Log WhatsApp', 'icon' => 'bi-whatsapp', 'active' => request()->routeIs('log-whatsapp.*')];
                     $vociMenu[] = ['route' => 'automazioni.index', 'label' => 'Automazioni', 'icon' => 'bi-lightning-charge', 'active' => request()->routeIs('automazioni.*')];
+                    $vociMenu[] = ['route' => 'operatori.index', 'label' => 'Operatori', 'icon' => 'bi-person-badge', 'active' => request()->routeIs('operatori.*')];
                     $vociMenu[] = ['route' => 'utenti.index', 'label' => 'Utenti', 'icon' => 'bi-people', 'active' => request()->routeIs('utenti.*')];
                     $vociMenu[] = ['route' => 'impostazioni.mostra', 'label' => 'Impostazioni', 'icon' => 'bi-gear', 'active' => request()->routeIs('impostazioni.*')];
                 }

@@ -64,6 +64,9 @@
                         @else
                             — tutti i tipi
                         @endif
+                        @if ($automazione->operatore)
+                            — solo operatore <strong>{{ $automazione->operatore }}</strong>
+                        @endif
                     </div>
                     @if ($eseguitaOggi)
                         <div class="small mt-1">

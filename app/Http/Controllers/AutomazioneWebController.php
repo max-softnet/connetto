@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Automazione;
 use App\Models\ModelloMessaggio;
+use App\Models\Operatore;
 use App\Models\TipoAppuntamento;
 use App\Services\EsecutoreAutomazioni;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ class AutomazioneWebController extends Controller
             'modello_id' => ['required', 'exists:modelli_messaggio,id'],
             'giorni_prima' => ['required', 'integer', 'min:0', 'max:60'],
             'tipo_appuntamento' => ['nullable', 'string', 'exists:tipi_appuntamento,nome'],
+            'operatore' => ['nullable', 'string', 'exists:operatori,nome'],
         ];
     }
 
@@ -31,9 +33,10 @@ class AutomazioneWebController extends Controller
     {
         $modelli = ModelloMessaggio::orderBy('nome')->get();
         $tipiAppuntamento = TipoAppuntamento::orderBy('nome')->get();
+        $operatori = $this->operatoriSelezionabili();
         $automazione = new Automazione();
 
-        return view('automazioni.form', compact('modelli', 'tipiAppuntamento', 'automazione'));
+        return view('automazioni.form', compact('modelli', 'tipiAppuntamento', 'operatori', 'automazione'));
     }
 
     public function store(Request $request)
@@ -50,8 +53,22 @@ class AutomazioneWebController extends Controller
     {
         $modelli = ModelloMessaggio::orderBy('nome')->get();
         $tipiAppuntamento = TipoAppuntamento::orderBy('nome')->get();
+        $operatori = $this->operatoriSelezionabili($automazione->operatore);
 
-        return view('automazioni.form', compact('modelli', 'tipiAppuntamento', 'automazione'));
+        return view('automazioni.form', compact('modelli', 'tipiAppuntamento', 'operatori', 'automazione'));
+    }
+
+    /**
+     * Operatori abilitati come criterio automazioni, includendo comunque quello
+     * eventualmente già selezionato su questa automazione anche se nel frattempo
+     * è stato disabilitato (altrimenti sparirebbe dal form in modifica).
+     */
+    private function operatoriSelezionabili(?string $operatoreCorrente = null)
+    {
+        return Operatore::where('abilitato_automazioni', true)
+            ->orWhere('nome', $operatoreCorrente)
+            ->orderBy('nome')
+            ->get();
     }
 
     public function update(Request $request, Automazione $automazione)

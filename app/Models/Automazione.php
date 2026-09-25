@@ -14,6 +14,7 @@ class Automazione extends Model
         'modello_id',
         'giorni_prima',
         'tipo_appuntamento',
+        'operatore',
         'attiva',
     ];
 
@@ -29,6 +30,11 @@ class Automazione extends Model
     public function tipoAppuntamento()
     {
         return $this->belongsTo(TipoAppuntamento::class, 'tipo_appuntamento', 'nome');
+    }
+
+    public function operatoreAutomazione()
+    {
+        return $this->belongsTo(Operatore::class, 'operatore', 'nome');
     }
 
     public function logEsecuzioni()

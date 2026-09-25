@@ -78,6 +78,10 @@ class EsecutoreAutomazioni
             $query->where('tipo', $automazione->tipo_appuntamento);
         }
 
+        if ($automazione->operatore) {
+            $query->where('operatore', $automazione->operatore);
+        }
+
         $appuntamenti = $query->get();
 
         if ($appuntamenti->isEmpty()) {

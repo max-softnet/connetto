@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppuntamentoWebController;
 use App\Http\Controllers\AutomazioneWebController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CalendarioWebController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\LogAutomazioneWebController;
 use App\Http\Controllers\LogWhatsappWebController;
 use App\Http\Controllers\MessaggioWebController;
 use App\Http\Controllers\ModelloMessaggioWebController;
+use App\Http\Controllers\OperatoreWebController;
 use App\Http\Controllers\UtenteWebController;
 use App\Http\Controllers\WebhookWhatsappController;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('ruolo:admin')->group(function () {
         Route::get('/appuntamenti/{appuntamento}/messaggi/crea', [MessaggioWebController::class, 'crea'])->name('messaggi.crea');
         Route::post('/appuntamenti/{appuntamento}/messaggi', [MessaggioWebController::class, 'salva'])->name('messaggi.salva');
+        Route::delete('/appuntamenti/{appuntamento}', [AppuntamentoWebController::class, 'destroy'])->name('appuntamenti.destroy');
 
         Route::resource('modelli-messaggio', ModelloMessaggioWebController::class)
             ->except('show')
@@ -60,6 +63,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/automazioni/{automazione}/esegui-forzata', [AutomazioneWebController::class, 'eseguiForzata'])->name('automazioni.esegui-forzata');
 
         Route::get('/log-automazioni', [LogAutomazioneWebController::class, 'index'])->name('log-automazioni.index');
+
+        Route::get('/operatori', [OperatoreWebController::class, 'index'])->name('operatori.index');
+        Route::post('/operatori/{operatore}/toggle-automazioni', [OperatoreWebController::class, 'toggleAutomazioni'])->name('operatori.toggle-automazioni');
 
         Route::get('/whatsapp-inbox', [ConversazioneWhatsappWebController::class, 'index'])->name('whatsapp-inbox.index');
         Route::get('/whatsapp-inbox/{conversazione}', [ConversazioneWhatsappWebController::class, 'mostra'])->name('whatsapp-inbox.mostra');
